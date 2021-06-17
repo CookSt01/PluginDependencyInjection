@@ -14,6 +14,10 @@ namespace SamplePluginLibrary
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected override void Load(ContainerBuilder builder)
         {
+            // If no dependencies are registered then assembly unloads fine
+            // If registrations are created that reference the assembly, the assembly won't unload
+
+            //builder.RegisterAssemblyTypes(Assembly.GetAssembly(GetType())).AsImplementedInterfaces();
             builder.RegisterType<PluginDependency>().As<IPluginDependency>();
         }
     }
