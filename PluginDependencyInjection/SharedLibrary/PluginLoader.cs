@@ -24,12 +24,5 @@ namespace SharedLibrary
                                     + AssemblyFileName;
             return pluginLocation;
         }
-
-        public static Assembly LoadAssemblyByName(PluginLoadContext PluginContext, string Name)
-        {
-            var assemblyName = new AssemblyName(Name);
-            Assembly pluginAssembly = PluginContext.LoadFromAssemblyName(assemblyName);
-            return pluginAssembly;
-        }
     }
 }
