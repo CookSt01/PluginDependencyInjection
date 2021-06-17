@@ -42,17 +42,15 @@ namespace PluginExperimentApplication
             var assemblyFileName = "SamplePluginLibrary.dll";
             var pluginTypeName = "SamplePluginLibrary.SamplePlugin";
             var pluginModuleTypeName = "SamplePluginLibrary.SamplePluginModule";
-            //var cancellationSource = new CancellationTokenSource();
 
-            var pluginLoader = new PluginLoader();
             var pluginLocation = PluginLoader.GetPluginLocation(assemblyDirectory, assemblyFileName);
 
             // Create ALC
             var pluginContext = PluginLoader.CreatePluginContext(pluginLocation);
-            var alcWeakRef = new WeakReference(pluginContext, trackResurrection: true);
+            var alcWeakRef = new WeakReference(pluginContext);
 
             // Load assemblies
-            var assembly = PluginLoader.LoadAssemblyByName(pluginContext, Path.GetFileNameWithoutExtension(pluginLocation));
+            var assembly = pluginContext.LoadFromAssemblyPath(pluginLocation);
 
             Type pluginType = assembly.ExportedTypes.FirstOrDefault(t => t.FullName == pluginTypeName);
             Type moduleType = assembly.ExportedTypes.FirstOrDefault(t => t.FullName == pluginModuleTypeName);
@@ -76,15 +74,11 @@ namespace PluginExperimentApplication
             catch (Exception ex)
             {
                 _logger.LogError("Exception: {exception} ", ex);
-                throw;
-            }
-            finally
-            {
-                // Unload ALC
-                pluginContext.Unload();
-                await Task.Yield();
             }
 
+            // Unload ALC
+            pluginContext.Unload();
+            await Task.Yield();
             return alcWeakRef;
         }
 

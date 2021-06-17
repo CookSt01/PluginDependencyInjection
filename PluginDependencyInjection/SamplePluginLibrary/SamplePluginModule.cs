@@ -14,7 +14,6 @@ namespace SamplePluginLibrary
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected override void Load(ContainerBuilder builder)
         {
-            //builder.RegisterAssemblyTypes(Assembly.GetAssembly(GetType()));
             builder.RegisterType<PluginDependency>().As<IPluginDependency>();
         }
     }
