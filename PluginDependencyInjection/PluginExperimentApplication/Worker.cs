@@ -58,6 +58,7 @@ namespace PluginExperimentApplication
 
             try
             {
+                // Create child scope for DI container. Expect this to get disposed to release plugin references.
                 using (var childScope = _scope.BeginLifetimeScope(builder =>
                 {
                     builder.RegisterModule(moduleInstance);
