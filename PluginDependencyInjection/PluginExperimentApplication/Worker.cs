@@ -53,29 +53,32 @@ namespace PluginExperimentApplication
             var assembly = pluginContext.LoadFromAssemblyPath(pluginLocation);
 
             Type pluginType = assembly.ExportedTypes.FirstOrDefault(t => t.FullName == pluginTypeName);
-            Type moduleType = assembly.ExportedTypes.FirstOrDefault(t => t.FullName == pluginModuleTypeName);
-            var moduleInstance = ActivatorUtilities.CreateInstance((IServiceProvider)_scope, moduleType) as IModule;
+            //Type moduleType = assembly.ExportedTypes.FirstOrDefault(t => t.FullName == pluginModuleTypeName);
+            //var moduleInstance = ActivatorUtilities.CreateInstance((IServiceProvider)_scope, moduleType) as IModule;
 
             try
             {
                 // Create child scope for DI container. Expect this to get disposed to release plugin references.
-                using (var childScope = _scope.BeginLifetimeScope(builder =>
-                {
-                    builder.RegisterModule(moduleInstance);
-                }))
-                {
-                    var instance = ActivatorUtilities.CreateInstance((IServiceProvider)childScope, pluginType) as IMyPlugin;
+                //using (var childScope = _scope.BeginLifetimeScope(builder =>
+                //{
+                //    //builder.RegisterModule(moduleInstance);
+                //}))
+                //{
+                    //var instance = ActivatorUtilities.CreateInstance((IServiceProvider)childScope, pluginType) as IMyPlugin;
+                    var instance = Activator.CreateInstance(pluginType) as IMyPlugin;
 
                     _logger.LogInformation($"LOAD: {pluginTypeName}.");
 
                     var pluginTask = instance.StartAsync();
                     await pluginTask;
-                }
+                //}
             }
             catch (Exception ex)
             {
                 _logger.LogError("Exception: {exception} ", ex);
             }
+
+            
 
             // Unload ALC
             pluginContext.Unload();

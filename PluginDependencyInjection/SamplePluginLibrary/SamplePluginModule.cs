@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using SharedLibrary;
 
 namespace SamplePluginLibrary
 {
@@ -18,7 +19,12 @@ namespace SamplePluginLibrary
             // If registrations are created that reference the assembly, the assembly won't unload
 
             //builder.RegisterAssemblyTypes(Assembly.GetAssembly(GetType())).AsImplementedInterfaces();
-            builder.RegisterType<PluginDependency>().As<IPluginDependency>();
+            //builder.RegisterType<PluginDependency>().As<IPluginDependency>();
+            //builder.RegisterType(typeof(SamplePlugin)).AsSelf().As<IMyPlugin>();
+
+            //builder.RegisterType<SampleWorker>().AsSelf();
+
+            builder.RegisterType<PluginLoader>().AsSelf();
         }
     }
 }

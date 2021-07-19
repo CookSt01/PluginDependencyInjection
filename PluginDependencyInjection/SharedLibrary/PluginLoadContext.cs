@@ -23,8 +23,8 @@ namespace SharedLibrary
             var assemblyDll = assemblyName.Name + ".dll";
             var defaultContext = AssemblyLoadContext.Default;
             var matchingAssemblies = defaultContext.Assemblies.Where(a => a.ManifestModule.Name == assemblyDll);
-
-            if (matchingAssemblies.Any())
+            
+            if (matchingAssemblies.Any(x => !x.FullName.Contains("Autofac")))
             {
                 return matchingAssemblies.First();
             }
